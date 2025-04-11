@@ -1,0 +1,288 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Utility\Html;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\Core\Breadcrumb\Breadcrumb;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\node\Entity\NodeType;
+use Drupal\node\Entity\Node;
+use \Drupal\Core\Field\EntityReferenceFieldItemList;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTManager;
+
+
+function janssenpmp_custom_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  switch ($form_id) {
+    case 'node_homepage_edit_form':
+    case 'node_page_form':
+    case 'node_page_edit_form':
+    case 'node_product_form':
+    case 'node_product_edit_form':
+    case 'node_segment_form':
+		case 'node_segment_edit_form':
+		case 'node_article_form':
+		case 'node_article_edit_form':
+		case 'node_overview_page_form':
+		case 'node_overview_page_edit_form':
+		case 'node_segement_topic_form':
+		case 'node_segement_topic_edit_form':
+    case 'node_contact_form':
+
+        $form['#attached']['library'][] = 'janssenpmp_custom/janssenpmp_paragraph';
+        break;
+
+    default:
+        # code...
+        break;
+  }
+}
+
+/*
+ * Implement hook_page_attachments_alter
+ */
+
+function janssenpmp_custom_page_attachments_alter(&$page) {
+  $page['#attached']['library'][] = 'janssenpmp_custom/brightcove_js';
+  $page['#attached']['library'][] = 'janssenpmp_custom/janssenpmp_custom';
+}
+
+function janssenpmp_custom_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {
+
+    switch ($entity->bundle()) {
+        case 'segment':
+        $new_node = $entity->isNew();
+        if(!$new_node){
+        $node_id =  $entity->id();
+        foreach ($entity->get('field_segement_topics') as $paragraph) {
+            if ($paragraph->entity->getType() == 'segment_topics') {
+                $segement_topic_paragraph = $paragraph->entity;
+                $title = $segement_topic_paragraph->field_segment_topic_title->value;
+                if(!empty($title)){
+                $frag = Html::getId($title);
+                $segement_topic_paragraph->set('field_segement_topic_link', [
+
+                'uri' => 'entity:node/'.$node_id,
+
+                'title' => $title,
+
+                'options' => ['attributes' => [
+
+                'target' => '_blank'
+
+                ],'fragment'=>$frag]
+
+                ]);
+
+                $segement_topic_paragraph->save();
+                }
+            }
+
+        }
+    }
+
+
+      break;
+  }
+}
+
+/**
+ * Implements hook_views_pre_execute().
+ */
+function janssenpmp_custom_views_pre_execute(ViewExecutable $view) {
+    if ($view->id() == 'overview_section'  && $view->current_display == 'article_overview') {
+      $input = $view->exposed_raw_input;
+      // Views Query.
+      $query = $view->build_info['query'];
+
+	  $query->leftJoin('taxonomy_index', 'tx', 'tx.nid = node_field_data.nid');
+	  $query->leftJoin('taxonomy_term_field_data', 'td', 'td.tid = tx.tid AND td.vid = :taxcat',array(':taxcat' => 'article_category'));
+	  $query->leftJoin('node__field_segment_category', 'sc', 'sc.entity_id = node_field_data.nid AND sc.deleted = :del AND sc.bundle = :bundle',array(':del' => 0,':bundle' => 'article'));
+	  $query->leftJoin('node_field_data', 'n', 'n.nid = sc.field_segment_category_target_id AND n.type = :segment AND n.status = :status',array(':status' => 1,':segment' => 'segment'));
+      // Add fields of table you joined.
+	  $query->fields('td',array('tid'));
+	  $query->fields('n',array('title'));
+	  $query->distinct();
+	  $query->groupBy('node_field_data.nid');
+
+      $view->build_info['query'] = $query;
+      $view->build_info['count_query'] = $query;
+    }
+
+}
+/**
+ * Implements hook_views_query_alter().
+ */
+function  janssenpmp_custom_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+
+    if ($view->id() == 'overview_section'  && $view->current_display == 'article_overview') {
+
+      foreach ($query->where as &$condition_group) {
+        foreach ($condition_group['conditions'] as &$condition) {
+          if ($condition['field'] == 'node_field_data.title') {
+            $condition = [
+              'field' => "CONCAT_WS(' ', node_field_data.title, ' ', td.name,' ',n.title) LIKE :views_combine",
+              'value' => array(':views_combine'=>  '%'.$view->exposed_raw_input['title'].'%'),
+              'operator' => 'formula',
+            ];
+        }
+        $category_values = $view->exposed_raw_input['field_segment_category_target_id'];
+        $seg_cat_val = explode (",", $category_values);
+
+        if ($condition['field'] == 'node__field_segment_category.field_segment_category_target_id') {
+            $condition = [
+              'field' => "node__field_segment_category.field_segment_category_target_id",
+              'value' => $seg_cat_val,
+              'operator' => 'IN',
+            ];
+        }
+        }
+      }
+    }
+	}
+
+/**
+ * Implements hook_views_pre_render.
+ */
+function janssenpmp_custom_views_pre_render(ViewExecutable $view) {
+	if ($view->id() == 'overview_section'  && $view->current_display == 'article_overview') {
+    $total_result = $view->total_rows;
+    if($view->pager->current_page == 0 && $total_result > 7){
+      article_shuffle($view->result);
+   }
+  }
+}
+
+function article_shuffle(&$result){
+  $p1 = array_splice($result, 1, 1);
+
+  $result = array_values($result);
+  $p2 = array_splice($result, 0, 9);
+
+  $result = array_merge($p2,$p1);
+  foreach($result as $key => $value){
+    $value->index = $key;
+
+  }
+}
+  /**
+   * Implements hook_form_FORM_ID_alter().
+   *
+   *
+   */
+function janssenpmp_custom_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+    if ($form['#id'] == 'views-exposed-form-overview-section-article-overview') {
+    $storage = Drupal::getContainer()->get('entity_type.manager')->getStorage('node');
+    $nids = $storage->getQuery();
+
+
+    $nids = $nids->condition('type', 'segment')
+     ->condition('status', 1)
+     ->sort('title')
+     ->execute();
+
+    // If there are no nodes, move on
+    if (!$nids) {
+     return FALSE;
+    }
+
+    // Start building out the options for our select list
+    $options = [];
+    $nodes = $storage->loadMultiple($nids);
+
+    // Push titles into select list
+    foreach ($nodes as $node) {
+     $options[$node->id()] = $node->getTitle();
+    }
+
+    // Start building out our new form element
+    $artist_field = 'field_segment_cat_cus_filter';
+    $form[$artist_field]['#type'] = 'checkboxes';
+
+    // Specify the empty option for our select list
+    //$form[$artist_field]['#empty_option'] = t('ALL');
+
+    // Add the $options from above to our select list
+    $form[$artist_field]['#options'] = $options;
+
+    unset($form[$artist_field]['#size']);
+    }
+}
+
+/**
+ * Implementation of hook_paragraph_view_alter().
+ */
+function janssenpmp_custom_paragraph_view_alter(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
+    if ($entity->hasField('field_hide_paragraph')) {
+        if ($entity->field_hide_paragraph->value == 1) {
+            $build['#access'] = FALSE;
+            $build['#printed'] = TRUE;
+        }
+    }
+}
+
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ */
+function janssenpmp_custom_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+
+	$node = \Drupal::request()->attributes->get('node');
+	if ($node && $node instanceof Drupal\node\Entity\Node) {
+
+		if ($node->bundle() == 'article') {
+			$breadcrumb->addLink(Link::createFromRoute(t('Articles'), '<none>'));
+			$breadcrumb->addLink(Link::createFromRoute($node->getTitle(), '<none>'));
+		}
+    if ($node->bundle() == 'product') {
+			$breadcrumb->addLink(Link::createFromRoute($node->getTitle(), '<none>'));
+      
+		}
+		if ($node->bundle() == 'page' || $node->bundle() == 'download' || $node->bundle() == 'overview_page' || $node->bundle() == 'segement_topic') {
+			$menu_defaults = menu_ui_get_menu_link_defaults($node);
+			if(empty($menu_defaults['id'])){
+				$breadcrumb->addLink(Link::createFromRoute($node->getTitle(), '<none>'));
+			}
+		}
+	}
+  $request = \Drupal::request();
+
+  if ($route_match->getRouteName() == 'janssenpmp_accesscode.download_form') {
+    $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+    $breadcrumb->addLink(Link::createFromRoute($title, '<nolink>'));
+  }
+}
+
+
+
+
+function janssenpmp_custom_mail_alter(&$message) {
+  // only alter contact forms
+  if (!empty($message['id']) && $message['id'] == 'contact_page_mail') {
+    $contact_message = $message['params']['contact_message'];
+    $message['body'] = [];
+    $fields = $contact_message->getFields();
+   $current_url  = \Drupal::request()->getRequestUri();
+    $new_body .= 'current url is:' . PHP_EOL . $current_url. PHP_EOL . PHP_EOL .'Message:' . PHP_EOL . $contact_message->get('message')->value . PHP_EOL . PHP_EOL;
+    foreach ($fields as $field_name => $field) {
+        if (get_class($field->getFieldDefinition()) == 'Drupal\field\Entity\FieldConfig') {
+            $new_body .= $field->getFieldDefinition()->label() . ':' . PHP_EOL;
+            if (isset($contact_message->get($field_name)->entity->uri->value)) {
+              $uri = $contact_message->get($field_name)->entity->uri->value;
+              $url = file_create_url($uri);
+              $new_body .=  $url . PHP_EOL . PHP_EOL;
+            } else {
+              $new_body .= $contact_message->get($field_name)->value . PHP_EOL . PHP_EOL;
+            }
+        }
+    }
+    $message['body'][] = $new_body;
+  }
+}
