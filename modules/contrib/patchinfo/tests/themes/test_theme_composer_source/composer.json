@@ -1,0 +1,32 @@
+{
+  "name": "drupal/test_theme_composer_source",
+  "description": "Support testing of PatchInfo composer source plugin.",
+  "type": "drupal-module",
+  "require": {
+      "php": ">=7.2"
+  },
+  "extra": {
+      "drush": {
+          "services": {
+              "drush.services.yml": "^9"
+          }
+      },
+      "patches": {
+          "drupal/drupal": {
+              "Add patch to core to facilitate testing":
+                "https://www.drupal.org/files/issues/add_a_patch-1643899-62.patch"
+          },
+          "drupal/test_theme_composer_source": {
+              "Add patch to test theme to facilitate testing":
+                "https://www.drupal.org/files/issues/add_a_patch-1643831-40.patch"
+          }
+      }
+  },
+  "homepage": "https://www.drupal.org/project/patchinfo",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/patchinfo",
+    "source": "http://git.drupal.org/project/patchinfo.git"
+  },
+  "license": "GPL-2.0+"
+}
+

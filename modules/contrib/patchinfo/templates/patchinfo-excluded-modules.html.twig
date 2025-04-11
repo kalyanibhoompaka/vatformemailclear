@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Default theme implementation for excluded modules information.
+ *
+ * Available variables:
+ * - excluded_modules: List of machine readable names of modules excluded from
+ *     update check
+ * - settings_url: URL of update module settings page.
+ *
+ * @see template_preprocess_patchinfo_excluded_modules()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if excluded_modules %}
+  <div class="patchinfo-excluded-modules">
+    <strong>{{ 'Modules excluded from update check:'|t }}</strong>
+    {{ excluded_modules }}
+    <p>
+      {{ 'Change the <a href=":settings_url">update settings</a> to restore update checks for these modules.'|t({ ':settings_url': settings_url|render }) }}
+    </p>
+  </div>
+{% endif %}

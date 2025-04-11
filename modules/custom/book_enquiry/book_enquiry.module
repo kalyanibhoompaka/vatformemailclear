@@ -1,0 +1,51 @@
+<?php
+function book_enquiry_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+
+  // print($form_id);
+
+  if($form_id == 'book_enquiry_form'){
+
+  //    print '<pre>';
+
+  //    print_r($form);
+
+  //    print '</pre>';
+
+  //$form['user_zip_code']['#title'] = 'Pin Code';
+ // $form['book_author_name'] = array(
+   //   '#type' => 'textfield',
+     // '#title' => 'Book Author Name',
+      //'#default_value' => 'Mahima Tailor',
+  //  );
+  }
+
+  if($form_id == 'user_register_form'){
+    $form['first_name'] = array(
+      '#type' => 'textfield',
+      '#title' => 'First Name',
+      '#default_value' => ' kalyani',
+    );
+  }
+}
+/**
+ * Implements hook_theme().
+ */
+function book_enquiry_theme($existing, $type, $theme, $path): array {
+ return [
+    'timetempl' => [
+      'variables' => [
+        'Country' => NULL,
+        'State' => NULL,
+        'City' => NULL,
+        'Timezone' => NULL,
+        'Pincode' => NULL,
+        'currentDateTime' => NULL,
+
+      ],
+      $variables['#cache']['max-age'] = 0,
+      'template' => 'timetempl',
+
+    ]
+  ];
+
+}

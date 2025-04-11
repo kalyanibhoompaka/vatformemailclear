@@ -1,0 +1,10 @@
+name: 'Composer source test theme'
+type: theme
+description: 'Support testing of PatchInfo composer source plugin.'
+base theme: stark
+core_version_requirement: ^8.9 || ^9 || ^10
+
+# Information added by Drupal.org packaging script on 2022-11-19
+version: '8.x-2.0-rc3'
+project: 'patchinfo'
+datestamp: 1668867380

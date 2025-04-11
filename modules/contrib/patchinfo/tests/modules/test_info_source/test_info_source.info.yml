@@ -1,0 +1,17 @@
+name: Info source test
+type: module
+description: 'Support testing of PatchInfo info source plugins.'
+package: Testing
+core_version_requirement: ^8.9 || ^9 || ^10
+
+patches:
+  - 'https://www.drupal.org/node/1739718 Issue 1739718, Patch #32'
+  - 'Patch without URL'
+  - 'https://www.example.org/ Patch with some special ~!*äöüß()[]{}%$'
+  - 'https://www.example.org/ <IMG SRC=/ onerror="alert(String.fromCharCode(88,83,83))"></img>'
+  - '<script src=http://xss.rocks/xss.js></script>'
+
+# Information added by Drupal.org packaging script on 2022-11-19
+version: '8.x-2.0-rc3'
+project: 'patchinfo'
+datestamp: 1668867380

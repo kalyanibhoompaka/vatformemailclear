@@ -1,0 +1,14 @@
+name: Info source test submodule
+type: module
+description: 'Support testing of PatchInfo info source plugin submodule support.'
+package: Testing
+core_version_requirement: ^8.9 || ^9 || ^10
+
+patches:
+  - 'https://www.drupal.org/node/12345678 Issue 12345678, Patch #90'
+  - 'Patch in submodule without URL'
+
+# Information added by Drupal.org packaging script on 2022-11-19
+version: '8.x-2.0-rc3'
+project: 'patchinfo'
+datestamp: 1668867380

@@ -1,0 +1,16 @@
+{
+    "name": "drupal/patchinfo_drupalorg",
+    "description": "Track patch information from drupal.org.",
+    "type": "drupal-module",
+    "require": {
+      "php": ">=7.2",
+      "ext-json": "*"
+    },
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9"
+            }
+        }
+    }
+}

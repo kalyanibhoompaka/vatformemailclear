@@ -1,0 +1,25 @@
+# book_enquiry.config_form:
+#   path: '/admin/config/book_enquiry'
+#   defaults:
+#     _title: 'Book Enquiry Configuration Form'
+#     _form: '\Drupal\book_enquiry\Form\BookEnquiryConfigForm'
+#   requirements: 
+#     _permission: 'administer site configuration'
+#   options:  
+#     _admin_route: TRUE
+
+book_enquiry.form:
+  path: '/book_enquiry'
+  defaults:
+    _title: 'Enquiry Form'
+    _form: '\Drupal\book_enquiry\Form\BookEnquiryForm'
+  requirements: 
+    _permission: 'administer site configuration'
+
+book_enquiry.config_form:
+  path: '/admin/config/book_enquiry/adminsettings'
+  defaults:
+    _form: '\Drupal\book_enquiry\Form\BookEnquiryConfigForm'
+    _title: 'books Configuration translation example settings'
+  requirements:
+    _permission: 'administer site configuration'

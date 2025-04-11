@@ -1,0 +1,16 @@
+config_translation_example.adminsettings:
+  type: config_object
+  label: 'Configuration translation example settings'
+  mapping:
+    selected_langcode:
+      type: string
+      label: 'select text'
+    Country:
+      type: text
+      label: 'country text'
+    boolean:
+      type: boolean
+      label: 'checkbox text'
+    email:
+      type: text
+      label: 'email text'

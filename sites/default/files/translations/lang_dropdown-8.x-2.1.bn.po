@@ -1,0 +1,26 @@
+# Bengali translation of Language Switcher Dropdown (8.x-2.1)
+# Copyright (c) 2023 by the Bengali translation team
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Language Switcher Dropdown (8.x-2.1)\n"
+"POT-Creation-Date: 2023-06-29 18:46+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Language-Team: Bengali\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "System"
+msgstr "সিস্টেম"
+msgid "Show"
+msgstr "দেখাও"
+msgid "Languages"
+msgstr "ভাষাসমূহ"
+msgid "Language code"
+msgstr "ভাষা কোড"
+msgid "About"
+msgstr "সম্পর্কে"
+msgid "Uses"
+msgstr "ব্যবহারকারীবৃন্দ"

@@ -1,0 +1,9 @@
+test_info_source.update_test:
+  path: '/patchinfo-update-test/{project_name}/{version}'
+  defaults:
+    _title: 'Update test'
+    _controller: '\Drupal\test_info_source\Controller\UpdateTestController::updateTest'
+    version: NULL
+    project_name: NULL
+  requirements:
+    _access: 'TRUE'

@@ -1,0 +1,51 @@
+<?php
+function getlanguages(){
+    $fields = array();
+      $title_field = array(
+        'Select' => t('Please select the Language'));
+      $languageList =  \Drupal::languageManager()->getLanguages();
+      foreach ( $languageList as $key => $val ) {
+            $fields[$key] = $languageList[$key]->getName();
+      }
+      asort($fields);
+      $fields = array_merge($title_field, $fields);
+      return $fields;
+}
+/**
+ * Implements hook_mail().
+ */
+function config_translation_example_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'myform_submit':
+      $token_service = \Drupal::token();
+  $message['headers'] += $params['headers'];
+      $token_data = [
+        'array' => $params['values'],
+      ];
+       
+      // In this example, put the submitted value from a 'first_name' element 
+      // into the subject.
+      $subject = 'Custom form data submitted by '.$params['Name'];
+      $message['subject'] = $token_service->replace($subject, $token_data, ['clear' => TRUE]);
+      $body = 'Name is '.$params['Name'].PHP_EOL.'Email: '.$params['Email'].PHP_EOL.'Organization_Name :'.$params['Organization_Name'].PHP_EOL.'VAT: '.$params['VAT'].PHP_EOL.
+      'Country: '.$params['Country'];
+     
+      $message['body'] = [$token_service->replace($body, $token_data, ['clear' => TRUE]),];
+      break;
+  }
+
+}
+function config_translation_form_form_alter(&$form, $form_state, $form_id) {
+  // modify only the user profile form
+  if ($form_id === 'myform_submit') {
+     // Use var_dump  to dump the $form array to see the fields. 
+var_dump ($form);
+
+ hide($form['mail']);
+  }
+}
+function config_translation_example_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'config_translation_example') {
+    unset($message['headers']['to']);
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "patches": {
+      "drupal/drupal": {
+        "Issue 2556069, Patch #46 (caption element throws TypeError: Cannot read property tagName of null in Drupal.behaviors.filterFilterHtmlUpdating)":
+          "https://www.drupal.org/files/issues/2018-08-31/2556069-46.patch"
+      },
+      "drupal/test_theme_mixed_sources": {
+        "Issue #3013512 by brtamas: Php 7.2 each() deprecated":
+          "https://git.drupalcode.org/project/draggableviews/commit/b973bfaf33b37ca5e473edddf20e25da1f9df163.diff"
+      }
+  }
+}

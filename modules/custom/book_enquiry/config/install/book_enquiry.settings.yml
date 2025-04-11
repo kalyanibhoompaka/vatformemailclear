@@ -1,0 +1,6 @@
+example: 'Your text'
+Country: 'country name'
+boolean: 'checkbox'
+email: 'email'
+selected_langcode: 'lang'
+langcode: en

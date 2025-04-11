@@ -1,0 +1,5 @@
+selected_langcode: 'select'
+Country : 'type country'
+boolean : 'publish'
+email : 'email'
+langcode: en

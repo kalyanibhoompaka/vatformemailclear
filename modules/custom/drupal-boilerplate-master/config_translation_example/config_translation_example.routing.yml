@@ -1,0 +1,14 @@
+config_translation_example.config:
+  path: '/admin/config/config-translation-example/adminsettings'
+  defaults:
+    _form: '\Drupal\config_translation_example\Form\ConfigForm'
+    _title: 'Configuration translation example settings'
+  requirements:
+    _permission: 'administer site configuration'
+config_translation_example.config_translation_example:
+  path: '/config_translation_example'
+  defaults:
+    _title: 'Enquiry Form'
+    _form: '\Drupal\config_translation_example\Form\config_translation_form'
+  requirements: 
+    _permission: 'access content'

@@ -1,0 +1,7 @@
+# Custom assign menu items definition
+book_enquiry.config_form:  
+  title: 'Book Enquiry configuration'  
+  route_name: book_enquiry.config_form  
+  description: 'Welcome to my book enquiry configuration form'  
+  parent: system.admin_config_system
+  weight: 99

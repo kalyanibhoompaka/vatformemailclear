@@ -1,0 +1,13 @@
+name: 'PatchInfo info.yml Source'
+description: 'Provides a PatchInfo Source for info.yml files'
+type: module
+package: Administration
+core_version_requirement: ^8.9 || ^9 || ^10
+
+dependencies:
+  - patchinfo:patchinfo
+
+# Information added by Drupal.org packaging script on 2022-11-19
+version: '8.x-2.0-rc3'
+project: 'patchinfo'
+datestamp: 1668867380

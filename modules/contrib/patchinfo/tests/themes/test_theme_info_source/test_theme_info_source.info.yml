@@ -1,0 +1,15 @@
+name: 'Info source test theme'
+type: theme
+description: 'Support testing of PatchInfo info source plugins.'
+base theme: stark
+core_version_requirement: ^8.9 || ^9 || ^10
+
+patches:
+  - 'https://www.drupal.org/node/2239723 Issue 2239723, Patch #14'
+  - 'Patch in theme without URL'
+  - 'https://www.example.net/ Theme patch with some special ~!*äöüß()[]{}%$'
+
+# Information added by Drupal.org packaging script on 2022-11-19
+version: '8.x-2.0-rc3'
+project: 'patchinfo'
+datestamp: 1668867380

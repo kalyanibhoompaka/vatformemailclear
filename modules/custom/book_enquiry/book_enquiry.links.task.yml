@@ -1,0 +1,4 @@
+book_enquiry.adminsettings_tab:
+  route_name: book_enquiry.config_form
+  title: Settings
+  base_route: book_enquiry.config_form

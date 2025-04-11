@@ -1,0 +1,9 @@
+name: Book Enquiry
+type: module
+description: 'Form to collect information about Book Enquiry'
+package: Custom
+version: 1.0
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:locale
+  - config_translation

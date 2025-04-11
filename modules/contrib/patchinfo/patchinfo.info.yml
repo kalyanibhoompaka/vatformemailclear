@@ -1,0 +1,14 @@
+name: PatchInfo
+description: Track patch information
+type: module
+package: Administration
+core_version_requirement: ^8.9 || ^9 || ^10
+dependencies:
+  - drupal:update
+
+configure: update.settings
+
+# Information added by Drupal.org packaging script on 2022-11-19
+version: '8.x-2.0-rc3'
+project: 'patchinfo'
+datestamp: 1668867380

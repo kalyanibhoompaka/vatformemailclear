@@ -1,0 +1,13 @@
+name: 'Info source test subtheme'
+type: theme
+description: 'Support testing of PatchInfo info source plugins.'
+base theme: test_theme_info_source
+core_version_requirement: ^8.9 || ^9 || ^10
+
+patches:
+  - 'Patch in sub-theme without URL'
+
+# Information added by Drupal.org packaging script on 2022-11-19
+version: '8.x-2.0-rc3'
+project: 'patchinfo'
+datestamp: 1668867380

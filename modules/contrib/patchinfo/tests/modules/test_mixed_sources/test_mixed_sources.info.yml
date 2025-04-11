@@ -1,0 +1,15 @@
+name: Mixed sources test
+type: module
+description: 'Support testing of mixed PatchInfo source plugins.'
+package: Testing
+core_version_requirement: ^8.9 || ^9 || ^10
+
+patches:
+  - 'https://www.drupal.org/node/2739718 Issue 2739718, Patch #42'
+  - 'Patch with-out URLs'
+  - 'https://www.example.net/ Patch with some special $()äöüß[]~!*{}%'
+
+# Information added by Drupal.org packaging script on 2022-11-19
+version: '8.x-2.0-rc3'
+project: 'patchinfo'
+datestamp: 1668867380
